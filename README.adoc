@@ -1,0 +1,39 @@
+= FluentdのSIGTERMの挙動確認
+
+== なぜ確認したいか？
+
+* ECS等でコンテナを更新する時、コンテナに `SIGTERM` が送られる
+* この時、Fluentdがバッファしたログが消失するのか確認したかった
+
+== 結論
+
+* `flush_at_shutdown true` が必要
+** ただし、万能ではない
+
+[quote, 'https://abicky.net/2017/10/23/110103/[fluentd の基礎知識]']
+____
+graceful stop したい場合に supervisor に対して送ります。supervisor は SIGINT or SIGTERM を受け取ると worker に SIGTERM を送り、worker は SIGTERM を受け取ると Engine.stop を実行します。これにより、memory buffer の場合や file buffer で flush_at_shutdown が true の場合は shutdown する前に一度だけ try_flush が実行されます。リトライされないので、flush に失敗した場合 memory buffer の内容は消失します。
+____
+
+== 【挙動】用意するshellは4つ
+
+* fluentdの起動&&挙動確認用
+* fluentd-catでfluentdにdummyのlogを送信する用
+* 定期的にtreeコマンドでfluentdが吐くfileを確認する用
+* 好きなタイミングで `docker stop fluentd` (SIGTERMを送る) する用
+
+----
+$ make fluentd
+----
+
+----
+$ make logger
+----
+
+----
+$ make tree
+----
+
+----
+$ docker stop fluentd
+----
