@@ -37,3 +37,7 @@ $ make tree
 ----
 $ docker stop fluentd
 ----
+
+== デモ(1分50秒くらい)
+
+image::https://github.com/sunakan/sunady2020-fluentd-sigterm-action/blob/demo-gif/demo-gif/demo.gif?raw=true["Demo",width=800,link="https://github.com/sunakan/sunady2020    -fluentd-sigterm-action/tree/demo-gif/demo-gif/demo.gif"]
