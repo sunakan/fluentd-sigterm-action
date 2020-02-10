@@ -14,7 +14,7 @@ function finally {
 }
 
 
-time=$(date --date='2020-01-01 15:00:00' +%s)
+time=$(date --date='2020-01-01 15:00:00+09:00' +%s)
 count=0
 
 while :

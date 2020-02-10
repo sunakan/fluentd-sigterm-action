@@ -12,6 +12,7 @@ fluentd: shared-network init
     --mount type=bind,source=${PWD}/tmp/my-buffer,target=/fluentd/my-buffer \
     --name fluentd \
     --net ${MY_NETWORK} \
+    --env TZ=Asia/Tokyo \
     fluentd:${DOCKER_FLUENTD_TAG}
 
 logger: shared-network
@@ -22,6 +23,7 @@ logger: shared-network
     --name logger \
     --mount type=bind,source=${PWD}/logger/logger.sh,target=/fluentd/logger.sh \
     --net ${MY_NETWORK} \
+    --env TZ=Asia/Tokyo \
     --workdir /fluentd \
     fluentd:${DOCKER_FLUENTD_TAG} \
     bash ./logger.sh
@@ -38,6 +40,8 @@ init:
 	rm -rf ./tmp
 	mkdir -p ./tmp/my-out
 	mkdir -p ./tmp/my-buffer
+	chmod o+w ./tmp/my-out
+	chmod o+w ./tmp/my-buffer
 
 tree:
 	watch -n 1 tree ./tmp
